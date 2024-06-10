@@ -34,7 +34,7 @@ namespace OOP_Assignment_1
 
         public override string ToString()
         {
-            return base.ToString() + $"Capacity: {capacity}\nRoomType: {roomType}";
+            return base.ToString() + $"Capacity: {capacity}\nRoomType: {roomType}\n";
         }
     }
 }
