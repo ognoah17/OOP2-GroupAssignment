@@ -108,6 +108,8 @@ namespace OOP_Assignment_1
                         string feature = parts[6];
                         string soundRating = parts[7];
                         appliance = new Dishwasher(itemNumber, brand, quantity, wattage, color, price, feature, soundRating);
+
+                        Console.WriteLine($"Loaded Dishwasher: Item Number: {itemNumber}, Sound Rating: {soundRating}");
                         break;
                     default:
                         continue;
@@ -115,6 +117,7 @@ namespace OOP_Assignment_1
                 appliances.Add(appliance);
             }
         }
+
 
         private static void CheckOutAppliance(long itemNumber)
         {
@@ -181,19 +184,24 @@ namespace OOP_Assignment_1
                     return;
             }
 
-            if (!filteredAppliances.Any())
-            {
-                Console.WriteLine("No matching appliances found.");
-            }
-            else
-            {
-                Console.WriteLine("Matching appliances:");
+                if (!filteredAppliances.Any())
+                {
+                    Console.WriteLine("No matching appliances found.\n");
+                }
+                else
+                {
                 foreach (var appliance in filteredAppliances)
                 {
                     Console.WriteLine(appliance.ToString());
+
+                    if (appliance is Dishwasher dishwasher)
+                    {
+                        Console.WriteLine($"Noise Level: {dishwasher.SoundRating}");
+                    }
                 }
             }
         }
+
 
         private static void ProduceRandomApplianceList(int number)
         {

@@ -33,7 +33,7 @@ namespace OOP_Assignment_1
 
         public override string ToString()
         {
-            return base.ToString() + $"Grade : {grade}\nVoltage : {voltage}";
+            return base.ToString() + $"Grade : {grade}\nVoltage : {voltage}\n";
         }
 
 
