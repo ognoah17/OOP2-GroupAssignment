@@ -7,9 +7,14 @@ namespace OOP_Assignment_1
 {
     class Program
     {
+        //Dfines list of appliances
         static List<Appliance> appliances = new List<Appliance>();
+
+        //Assigns 'filepath' to appliances.txt
         static string filePath = "appliances.txt";
 
+        //Main program loop and menu as well
+        //Error handling
         static void Main(string[] args)
         {
             try
@@ -71,6 +76,7 @@ namespace OOP_Assignment_1
             }
         }
 
+        //Parser method for loading objects from txt file
         private static void LoadAppliancesFromFile()
         {
             string[] lines = File.ReadAllLines(filePath);
@@ -100,7 +106,7 @@ namespace OOP_Assignment_1
                         break;
                     case '3':
                         double capacity = double.Parse(parts[6]);
-                        bool roomType = parts[7].ToLower() == "k";
+                        string roomType = parts[7].ToLower();
                         appliance = new Microwave(itemNumber, brand, quantity, wattage, color, price, capacity, roomType);
                         break;
                     case '4':
@@ -108,8 +114,6 @@ namespace OOP_Assignment_1
                         string feature = parts[6];
                         string soundRating = parts[7];
                         appliance = new Dishwasher(itemNumber, brand, quantity, wattage, color, price, feature, soundRating);
-
-                        Console.WriteLine($"Loaded Dishwasher: Item Number: {itemNumber}, Sound Rating: {soundRating}");
                         break;
                     default:
                         continue;
@@ -118,17 +122,18 @@ namespace OOP_Assignment_1
             }
         }
 
-
+        //Checkout method for changing the availability of appliances
+        //Error handling
         private static void CheckOutAppliance(long itemNumber)
         {
             Appliance appliance = appliances.FirstOrDefault(a => a.ItemNumber == itemNumber);
             if (appliance == null)
             {
-                Console.WriteLine($"No appliances found with that item number.");
+                Console.WriteLine("No appliances found with that item number.");
             }
             else if (!appliance.isAvailable())
             {
-                Console.WriteLine($"The appliance is not available to be checked out.");
+                Console.WriteLine("The appliance is not available to be checked out.");
             }
             else
             {
@@ -137,6 +142,8 @@ namespace OOP_Assignment_1
             }
         }
 
+        //Brand search method 
+        //Error handling
         private static void FindAppliancesByBrand(string brand)
         {
             var matchingAppliances = appliances.Where(a => a.Brand.Equals(brand, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -154,6 +161,9 @@ namespace OOP_Assignment_1
             }
         }
 
+        //Display by type method which sorts and displays appliances based on a given type
+        //Depending on type will then prompt user to specify features
+        //Error handling
         private static void DisplayAppliancesByType(int type)
         {
             List<Appliance> filteredAppliances;
@@ -170,13 +180,15 @@ namespace OOP_Assignment_1
                     filteredAppliances = appliances.OfType<Vacuum>().Where(v => v.Voltage == voltage).Cast<Appliance>().ToList();
                     break;
                 case 3:
-                    Console.Write("Room where the microwave will be installed: K (kitchen) or W (work site): ");
-                    bool roomType = Console.ReadLine().ToLower() == "k";
+                    Console.Write("Room where the microwave will be installed: k (kitchen) or w (work site): ");
+                    string roomType = Console.ReadLine().ToLower();
                     filteredAppliances = appliances.OfType<Microwave>().Where(m => m.RoomType == roomType).Cast<Appliance>().ToList();
                     break;
                 case 4:
                     Console.Write("Enter the sound rating of the dishwasher: Qt (Quietest), Qr (Quieter), Qu (Quiet) or M (Moderate): ");
                     string soundRating = Console.ReadLine();
+                    soundRating = soundRating.Replace("Qu", "Quiet").Replace("Qt", "Quietest").Replace("Qr", "Quieter").Replace("M", "Moderate");
+
                     filteredAppliances = appliances.OfType<Dishwasher>().Where(d => d.SoundRating.Equals(soundRating, StringComparison.OrdinalIgnoreCase)).Cast<Appliance>().ToList();
                     break;
                 default:
@@ -184,12 +196,12 @@ namespace OOP_Assignment_1
                     return;
             }
 
-                if (!filteredAppliances.Any())
-                {
-                    Console.WriteLine("No matching appliances found.\n");
-                }
-                else
-                {
+            if (!filteredAppliances.Any())
+            {
+                Console.WriteLine("No matching appliances found.\n");
+            }
+            else
+            {
                 foreach (var appliance in filteredAppliances)
                 {
                     Console.WriteLine(appliance.ToString());
@@ -202,7 +214,7 @@ namespace OOP_Assignment_1
             }
         }
 
-
+        // Uses a Random object to shuffle and select a specified number of appliances from the list
         private static void ProduceRandomApplianceList(int number)
         {
             var random = new Random();
@@ -214,6 +226,7 @@ namespace OOP_Assignment_1
             }
         }
 
+        //Saves changes made to appliances inventory to file
         private static void SaveAppliancesToFile()
         {
             using (StreamWriter writer = new StreamWriter(filePath))
@@ -224,6 +237,8 @@ namespace OOP_Assignment_1
                 }
             }
             Console.WriteLine("Appliances have been saved to file.");
+        
         }
     }
 }
+
